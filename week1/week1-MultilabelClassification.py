@@ -310,16 +310,19 @@ def print_words_for_tag(classifier, tag, tags_classes, index_to_words, all_words
     print('Tag:\t{}'.format(tag))
     
     # Extract an estimator from the classifier for the given tag.
-    # Extract feature coefficients from the estimator. 
+    # Extract feature coefficients from the estimator.
     
     ######################################
     ######### YOUR CODE HERE #############
     ######################################
+    coef = classifier.coef_[tags_classes.index(tag)]
+    coef_dict = {idx:c for idx,c in enumerate(coef.tolist())}
+    sorted_coefs = sorted(coef_dict.items(), key=lambda x: x[1], reverse=True)
     
     # top-5 words sorted by the coefficiens.
-    top_positive_words = 
+    top_positive_words = [index_to_words[i[0]] for i in sorted_coefs[:5]]
     # bottom-5 words  sorted by the coefficients.
-    top_negative_words = 
+    top_negative_words = [index_to_words[i[0]] for i in sorted_coefs[-5:]]
     print('Top positive words:\t{}'.format(', '.join(top_positive_words)))
     print('Top negative words:\t{}\n'.format(', '.join(top_negative_words)))
                                     
