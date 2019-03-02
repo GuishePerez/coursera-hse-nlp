@@ -12,7 +12,7 @@ RESOURCE_PATH = {
     'TAG_CLASSIFIER': 'tag_classifier.pkl',
     'TFIDF_VECTORIZER': 'tfidf_vectorizer.pkl',
     'THREAD_EMBEDDINGS_FOLDER': 'thread_embeddings_by_tags',
-    'WORD_EMBEDDINGS': 'word_embeddings.tsv',
+    'WORD_EMBEDDINGS': 'starspace_embedding.tsv',
 }
 
 
@@ -49,12 +49,15 @@ def load_embeddings(embeddings_path):
     ########################
     #### YOUR CODE HERE ####
     ########################
-
-    # remove this when you're done
-    raise NotImplementedError(
-        "Open utils.py and fill with your code. In case of Google Colab, download"
-        "(https://github.com/hse-aml/natural-language-processing/blob/master/project/utils.py), "
-        "edit locally and upload using '> arrow on the left edge' -> Files -> UPLOAD")
+    starspace_embeddings = dict()
+    with open(embeddings_path, encoding='utf-8') as f:
+        for line in f.readlines():
+            row = line.strip().split('\t')
+            starspace_embeddings[row[0]] = np.array(row[1:], dtype=np.float32)
+    # Dimension of loaded embeddings
+    starspace_embeddings_dim = starspace_embeddings[list(starspace_embeddings)[0]].shape[0]
+    
+    return starspace_embeddings, starspace_embeddings_dim
 
 
 def question_to_vec(question, embeddings, dim):
@@ -65,12 +68,24 @@ def question_to_vec(question, embeddings, dim):
     ########################
     #### YOUR CODE HERE ####
     ########################
-
-    # remove this when you're done
-    raise NotImplementedError(
-        "Open utils.py and fill with your code. In case of Google Colab, download"
-        "(https://github.com/hse-aml/natural-language-processing/blob/master/project/utils.py), "
-        "edit locally and upload using '> arrow on the left edge' -> Files -> UPLOAD")
+    word_tokens = question.split(" ")
+    question_len = len(word_tokens)
+    question_mat = np.zeros((question_len,dim), dtype = np.float32)
+    
+    for idx, word in enumerate(word_tokens):
+        if word in embeddings:
+            question_mat[idx,:] = embeddings[word]
+            
+    # remove zero-rows which stand for OOV words       
+    question_mat = question_mat[~np.all(question_mat == 0, axis = 1)]
+    
+    # Compute the mean of each word along the sentence
+    if question_mat.shape[0] > 0:
+        vec = np.array(np.mean(question_mat, axis = 0), dtype = np.float32).reshape((1,dim))
+    else:
+        vec = np.zeros((1,dim), dtype = np.float32)
+        
+    return vec
 
 
 def unpickle_file(filename):
