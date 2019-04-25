@@ -15,7 +15,7 @@ ipython==6.2.1
 ipython-genutils==0.2.0
 ipywidgets==7.0.5
 jedi==0.11.0
-Jinja2==2.10
+Jinja2~>2.10.1
 jsonschema==2.6.0
 jupyter==1.0.0
 jupyter-client==5.1.0
@@ -35,7 +35,7 @@ mock==2.0.0
 nbconvert==5.3.1
 nbformat==4.4.0
 nltk==3.2.5
-notebook==5.2.1
+notebook~>5.7.8
 numpy==1.13.3
 pandas==0.21.0
 pandocfilters==1.4.2
@@ -56,14 +56,14 @@ scikit-learn==0.19.1
 scipy==1.0.0
 simplegeneric==0.8.1
 six==1.11.0
-tensorflow==1.4.0
+tensorflow~>1.6.0
 tensorflow-tensorboard==0.4.0rc3
 terminado==0.7
 testpath==0.3.1
 tornado==4.5.2
 tqdm==4.19.4
 traitlets==4.3.2
-urllib3==1.23
+urllib3~>1.24.2
 wcwidth==0.1.7
 Werkzeug==0.12.2
 widgetsnbextension==3.0.8
